@@ -4,7 +4,8 @@ import TodoElem from "./components/TodoElem";
 export enum EnumCategories {
     'TO_DO' = 'TO_DO',
     'DOING' = 'DOING',
-    'DONE' = 'DONE'
+    'DONE' = 'DONE',
+    'ALL' = 'ALL'
 };
 
 export interface IToDos {
@@ -28,6 +29,7 @@ export const todoSelector = selector({
     get: ({ get }) => {
         const toDos = get(toDoState);
         const chosenCategory = get(category);
-        return toDos.filter(toDoElem => toDoElem.category === chosenCategory);
+        if(chosenCategory === EnumCategories.ALL) return toDoState;
+        else return toDos.filter(toDoElem => toDoElem.category === chosenCategory);
     }
 });
