@@ -36,12 +36,15 @@ function CategoryCreator() {
 
     return (
         <>
-            <form onSubmit={handleMakeNewCategorySubmit}>
+            <form
+            style={{ textAlign: 'center' }}
+            onSubmit={handleMakeNewCategorySubmit}>
                 <input 
                 placeholder="Make your new category!" 
                 onChange={handleOnChange}
                 value={newCategoryName}
                 />
+                &ensp;
                 <button>Make New Category</button>
             </form>
         </>

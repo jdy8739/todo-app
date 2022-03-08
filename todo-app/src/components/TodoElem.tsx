@@ -5,8 +5,8 @@ import { categoriesObjAtom, IToDos, toDoStateAtom } from "../atoms";
 
 const DeleteBtn = styled.button`
     color: red;
-    border-radius: 50%;
     border: none;
+    border-radius: 50%;
     cursor: pointer;
     box-shadow: rgba(0, 10, 10, 2);
     box-sizing: border-box;
@@ -60,7 +60,7 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
     return (
         <>
             <TodoLiElem>{ toDoElem.toDo }
-                &ensp;
+                <br></br>
                 <span>
                     {
                         Object.keys(categoriesObj).map((categoryElem, i) => {

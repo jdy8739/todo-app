@@ -1,13 +1,21 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
+import styled from "styled-components";
 import { categoriesObjAtom, category, todoSelector, toDoStateAtom } from "./atoms";
 import CategoryCreator from "./components/CategoryCreator";
+import Header from "./components/Header";
 import TodoList from "./components/TodoList";
 
 interface INewToDo {
     newToDo: string
 };
+
+const ErrorMessageDiv = styled.div`
+    width: 200px;
+    height: 20px;
+    margin: 10px auto;
+`;
 
 let cnt = 0;
 
@@ -65,24 +73,30 @@ function App() {
 
     return (
       <div className="App">
-            <select onChange={handleCategoryChange} value={chosenCategory}>
-                {
-                    Object.keys(categoriesObj).map((categoryElem, i) => {
-                        return (
-                            <option key={i} 
-                            value={categoriesObj[categoryElem]}
-                            >{categoryElem}</option>
-                        )
-                    })
-                }
-            </select>
-            <form onSubmit={handleSubmit(onValid)}>
+            <Header />
+            <form
+            style={{ textAlign: 'center' }}
+            onSubmit={handleSubmit(onValid)}
+            >
+                <select onChange={handleCategoryChange} value={chosenCategory}>
+                    {
+                        Object.keys(categoriesObj).map((categoryElem, i) => {
+                            return (
+                                <option key={i} 
+                                value={categoriesObj[categoryElem]}
+                                >{categoryElem}</option>
+                            )
+                        })
+                    }
+                </select>
+                &ensp;
                 <input {...toDoRegister} 
                 placeholder="Input your to-do here!"
                 disabled={ chosenCategory === categoriesObj.ALL }
                 />
+                &ensp;
                 <button type="submit">Add</button>
-                <p>{ errors?.newToDo?.message }</p>
+                <ErrorMessageDiv>{ errors?.newToDo?.message }</ErrorMessageDiv>
             </form>
             <TodoList toDos={filteredToDoList}/>
             <CategoryCreator />

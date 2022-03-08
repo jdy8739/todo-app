@@ -1,5 +1,5 @@
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { categoriesObjAtom, category, ICategoriesObj, IToDos, toDoStateAtom } from "../atoms";
 import TodoElem from "./TodoElem";
@@ -17,13 +17,28 @@ const CategoryDeleteBtn = styled.button`
     float: right;
 `;
 
+const CategoryTitle = styled.h2`
+    display: inline-block;
+    margin-top: 0;
+`;
+
+const Category = styled.div`
+    &:hover {
+        ${CategoryTitle} {
+            color: red;
+        }
+    }
+`;
+
 function TodoList({ toDos }: { toDos: IToDos[] }) {
 
-    const chosenCategory = useRecoilValue(category);
+    const [chosenCategory, setChosenCategory] = useRecoilState(category);
 
     const [categoriesObj, setCategoriesObj] = useRecoilState(categoriesObjAtom);
 
     const [toDoState, setToDoState] = useRecoilState(toDoStateAtom);
+
+    const setCategory = useSetRecoilState(category);
 
     const deleteCategory = (chosenCategoryName: string) => {
 
@@ -49,6 +64,8 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
             const updatedCategoriesObj = {...categoriesObj};
             return deleteToDoCategory(updatedCategoriesObj, chosenCategoryName);;
         });
+
+        setChosenCategory('ALL');
     };
 
     const deleteToDoListMatchesCategory = (updatedToDoState: IToDos[], chosenCategoryName: string) => {
@@ -65,6 +82,10 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
         return updatedCategoriesObj;
     };
 
+    const handleOnClickCategory = (changedCategory: string) => {
+        setCategory(changedCategory);
+    };
+
     return (
         <>
             <ul>
@@ -74,11 +95,12 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
                         {
                             Object.keys(categoriesObj).map(category => {
                                 return (
-                                    <div key={category}>
+                                    <Category key={category} 
+                                    onDoubleClick={() => handleOnClickCategory(category)}>
                                         {   
                                             category === 'ALL' ? null :
                                             <>
-                                                <span>{category}</span>
+                                                <CategoryTitle>{category}</CategoryTitle>
                                                 &ensp;
                                                 <CategoryDeleteBtn 
                                                 onClick={() => deleteCategory(category)}
@@ -98,13 +120,19 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
                                                 <hr></hr>
                                             </>
                                         }
-                                    </div>
+                                    </Category>
                                 )
                             })
                         }
                     </> 
                     :
                     <>
+                        <CategoryTitle>{chosenCategory}</CategoryTitle>
+                        &ensp;
+                        <CategoryDeleteBtn 
+                        onClick={() => deleteCategory(chosenCategory)}
+                        >Delete Category</CategoryDeleteBtn>
+                        <div style={{ clear: 'both' }}></div>
                         {
                             toDos.map((toDoElem, i) => {
                                 return (
@@ -112,6 +140,7 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
                                 )
                             })
                         }
+                        <hr></hr>
                     </>
                 }
             </ul>
