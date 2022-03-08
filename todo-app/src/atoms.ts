@@ -7,10 +7,21 @@ export enum EnumCategories {
     'ALL' = 'ALL'
 };
 
+interface ICategoriesObj {
+    [key: string]: string;
+};
+
+export const categoriesObj: ICategoriesObj = {
+    'TO_DO': 'TO_DO',
+    'DOING': 'DOING',
+    'DONE': 'DONE',
+    'ALL': 'ALL'
+};
+
 export interface IToDos {
     toDo: string,
     id: number,
-    category: EnumCategories
+    category: string
 };
 
 export const toDoState = atom<IToDos[]>({
@@ -18,9 +29,9 @@ export const toDoState = atom<IToDos[]>({
     default: []
 });
 
-export const category = atom<EnumCategories>({
+export const category = atom<string>({
     key: 'category',
-    default: EnumCategories.TO_DO
+    default: categoriesObj.TO_DO
 });
 
 export const todoSelector = selector({
@@ -28,7 +39,7 @@ export const todoSelector = selector({
     get: ({ get }) => {
         const toDos = get(toDoState);
         const chosenCategory = get(category);
-        if(chosenCategory === EnumCategories.ALL) return toDoState;
+        if(chosenCategory === categoriesObj.ALL) return toDoState;
         else return toDos.filter(toDoElem => toDoElem.category === chosenCategory);
     }
 });

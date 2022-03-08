@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { category, EnumCategories, todoSelector, toDoState } from "./atoms";
+import { categoriesObj, category, todoSelector, toDoState } from "./atoms";
+import CategoryCreator from "./components/CategoryCreator";
 import TodoList from "./components/TodoList";
 
 interface INewToDo {
@@ -27,7 +28,7 @@ function App() {
 
     const [toDos, setToDos] = useRecoilState(toDoState);
 
-    const [chosenCategory, setChosenCategory] = useRecoilState<EnumCategories>(category);
+    const [chosenCategory, setChosenCategory] = useRecoilState<string>(category);
 
     const onValid = function({ newToDo }: INewToDo) {
         if(checkNewToDoLen(newToDo)) {
@@ -48,7 +49,7 @@ function App() {
     };
 
     const handleCategoryChange = function(e: React.FormEvent<HTMLSelectElement>) {
-        const chosenCategory = e.currentTarget.value as EnumCategories;
+        const chosenCategory: string = e.currentTarget.value;
         setChosenCategory(chosenCategory);
     };
 
@@ -63,20 +64,26 @@ function App() {
     return (
       <div className="App">
             <select onChange={handleCategoryChange} value={chosenCategory}>
-                <option value={EnumCategories.ALL}>ALL</option>
-                <option value={EnumCategories.TO_DO}>TO-DO</option>
-                <option value={EnumCategories.DOING}>DOING</option>
-                <option value={EnumCategories.DONE}>DONE</option>
+                {
+                    Object.keys(categoriesObj).map((categoryElem, i) => {
+                        return (
+                            <option key={i} 
+                            value={categoriesObj[categoryElem]}
+                            >{categoryElem}</option>
+                        )
+                    })
+                }
             </select>
             <form onSubmit={handleSubmit(onValid)}>
                 <input {...toDoRegister} 
                 placeholder="Input your to-do here!"
-                disabled={ chosenCategory === EnumCategories.ALL }
+                disabled={ chosenCategory === categoriesObj.ALL }
                 />
                 <button type="submit">Add</button>
                 <p>{ errors?.newToDo?.message }</p>
             </form>
             <TodoList toDos={filteredToDoList}/>
+            <CategoryCreator />
       </div>
     );
   }

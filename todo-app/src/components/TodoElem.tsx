@@ -1,7 +1,7 @@
 import React from "react";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { EnumCategories, IToDos, toDoState } from "../atoms";
+import { categoriesObj, IToDos, toDoState } from "../atoms";
 
 const DeleteBtn = styled.button`
     color: red;
@@ -16,7 +16,7 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
     const setToDoList = useSetRecoilState(toDoState);
 
     const handleChangeCategory = function(e: React.MouseEvent<HTMLButtonElement>) {
-        const newCategory = e.currentTarget.name as EnumCategories;
+        const newCategory: string = e.currentTarget.name;
 
         setToDoList(oldToDoList => {
 
@@ -51,26 +51,23 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
             <li>{ toDoElem.toDo }
                 &ensp;
                 <span>
-                    { 
-                        toDoElem.category != EnumCategories.TO_DO && 
-                        <button onClick={handleChangeCategory} 
-                        name={EnumCategories.TO_DO}>
-                            TO-DO
-                        </button> 
-                    }
-                    { 
-                        toDoElem.category != EnumCategories.DOING && 
-                        <button onClick={handleChangeCategory} 
-                        name={EnumCategories.DOING}>
-                            DOING
-                        </button> 
-                    }
-                    { 
-                        toDoElem.category != EnumCategories.DONE && 
-                        <button onClick={handleChangeCategory} 
-                        name={EnumCategories.DONE}>
-                            DONE
-                        </button>
+                    {
+                        Object.keys(categoriesObj).map((categoryElem, i) => {
+                            return (
+                                (
+                                    toDoElem.category !== categoriesObj[categoryElem] 
+                                    &&
+                                    categoryElem !== categoriesObj['ALL']
+                                ) && 
+                                <button 
+                                onClick={handleChangeCategory} 
+                                name={categoriesObj[categoryElem]}
+                                key={i}
+                                >
+                                    { categoryElem }
+                                </button>
+                            )
+                        })
                     }
                     <DeleteBtn onClick={deleteToDoElem}>x</DeleteBtn>
                 </span>
