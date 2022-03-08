@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { categoriesObjAtom, IToDos, toDoState } from "../atoms";
+import { categoriesObjAtom, IToDos, toDoStateAtom } from "../atoms";
 
 const DeleteBtn = styled.button`
     color: red;
@@ -9,11 +9,20 @@ const DeleteBtn = styled.button`
     border: none;
     cursor: pointer;
     box-shadow: rgba(0, 10, 10, 2);
+    box-sizing: border-box;
+    &:hover {
+        background-color: red;
+        color: white;
+    }
+`;
+
+const TodoLiElem = styled.li`
+    padding: 4px;
 `;
 
 function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
 
-    const setToDoList = useSetRecoilState(toDoState);
+    const setToDoList = useSetRecoilState(toDoStateAtom);
 
     const handleChangeCategory = function(e: React.MouseEvent<HTMLButtonElement>) {
         const newCategory: string = e.currentTarget.name;
@@ -50,7 +59,7 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
 
     return (
         <>
-            <li>{ toDoElem.toDo }
+            <TodoLiElem>{ toDoElem.toDo }
                 &ensp;
                 <span>
                     {
@@ -61,19 +70,21 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
                                     &&
                                     categoryElem !== categoriesObj['ALL']
                                 ) && 
-                                <button 
-                                onClick={handleChangeCategory} 
-                                name={categoriesObj[categoryElem]}
-                                key={i}
-                                >
-                                    { categoryElem }
-                                </button>
+                                <span key={i}>
+                                    <button 
+                                    onClick={handleChangeCategory} 
+                                    name={categoriesObj[categoryElem]}
+                                    >
+                                        { categoryElem }
+                                    </button>
+                                    &ensp;
+                                </span>
                             )
                         })
                     }
                     <DeleteBtn onClick={deleteToDoElem}>x</DeleteBtn>
                 </span>
-            </li>
+            </TodoLiElem>
         </>
     )
 };

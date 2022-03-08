@@ -7,7 +7,7 @@ export enum EnumCategories {
     'DONE' = 'DONE'
 };
 
-interface ICategoriesObj {
+export interface ICategoriesObj {
     [key: string]: string;
 };
 
@@ -29,7 +29,7 @@ export interface IToDos {
     category: string
 };
 
-export const toDoState = atom<IToDos[]>({
+export const toDoStateAtom = atom<IToDos[]>({
     key: 'todo',
     default: []
 });
@@ -42,9 +42,9 @@ export const category = atom<string>({
 export const todoSelector = selector({
     key: 'toDoSelector',
     get: ({ get }) => {
-        const toDos = get(toDoState);
+        const toDos = get(toDoStateAtom);
         const chosenCategory = get(category);
-        if(chosenCategory === categoriesObj.ALL) return toDoState;
+        if(chosenCategory === categoriesObj.ALL) return toDoStateAtom;
         else return toDos.filter(toDoElem => toDoElem.category === chosenCategory);
     }
 });

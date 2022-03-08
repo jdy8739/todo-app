@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { categoriesObjAtom, category, todoSelector, toDoState } from "./atoms";
+import { categoriesObjAtom, category, todoSelector, toDoStateAtom } from "./atoms";
 import CategoryCreator from "./components/CategoryCreator";
 import TodoList from "./components/TodoList";
 
@@ -26,7 +26,7 @@ function App() {
         disabled: false
     });
 
-    const [toDos, setToDos] = useRecoilState(toDoState);
+    const [toDos, setToDos] = useRecoilState(toDoStateAtom);
 
     const [chosenCategory, setChosenCategory] = useRecoilState<string>(category);
 
