@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { categoriesObj, category, todoSelector, toDoState } from "./atoms";
+import { categoriesObjAtom, category, todoSelector, toDoState } from "./atoms";
 import CategoryCreator from "./components/CategoryCreator";
 import TodoList from "./components/TodoList";
 
@@ -60,6 +60,8 @@ function App() {
         if(newToDo.length > TO_DO_LEN_LIMIT) return true;
         else return false;
     };
+
+    const categoriesObj = useRecoilValue(categoriesObjAtom);
 
     return (
       <div className="App">

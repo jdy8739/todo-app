@@ -1,7 +1,7 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { categoriesObj, IToDos, toDoState } from "../atoms";
+import { categoriesObjAtom, IToDos, toDoState } from "../atoms";
 
 const DeleteBtn = styled.button`
     color: red;
@@ -45,6 +45,8 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
             return updatedToDoList;
         });
     };
+
+    const categoriesObj = useRecoilValue(categoriesObjAtom);
 
     return (
         <>

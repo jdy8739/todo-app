@@ -1,10 +1,10 @@
 import { atom, selector } from "recoil";
 
 export enum EnumCategories {
+    'ALL' = 'ALL',
     'TO_DO' = 'TO_DO',
     'DOING' = 'DOING',
-    'DONE' = 'DONE',
-    'ALL' = 'ALL'
+    'DONE' = 'DONE'
 };
 
 interface ICategoriesObj {
@@ -17,6 +17,11 @@ export const categoriesObj: ICategoriesObj = {
     'DONE': 'DONE',
     'ALL': 'ALL'
 };
+
+export const categoriesObjAtom = atom<ICategoriesObj>({
+    key: 'categoriesObjAtom',
+    default: categoriesObj
+});
 
 export interface IToDos {
     toDo: string,
