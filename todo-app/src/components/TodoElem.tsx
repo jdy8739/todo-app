@@ -79,4 +79,4 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
     )
 };
 
-export default TodoElem;
+export default React.memo(TodoElem);

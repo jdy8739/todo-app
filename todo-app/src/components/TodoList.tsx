@@ -1,3 +1,4 @@
+import React from "react";
 import { useRecoilValue } from "recoil";
 import { category, EnumCategories, IToDos } from "../atoms";
 import TodoElem from "./TodoElem";
@@ -48,4 +49,4 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
     )
 };
 
-export default TodoList;
+export default React.memo(TodoList);

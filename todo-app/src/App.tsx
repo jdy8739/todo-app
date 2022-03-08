@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { category, EnumCategories, todoSelector, toDoState } from "./atoms";
@@ -8,9 +8,22 @@ interface INewToDo {
     newToDo: string
 };
 
+let cnt = 0;
+
 function App() {
 
+    cnt ++;
+
     const { register, handleSubmit, setValue, formState: { errors }, setError } = useForm<INewToDo>();
+
+    const toDoRegister = register('newToDo', {
+        required: 'Write here!',
+        minLength: {
+            value: 3,
+            message: 'Write down specific!'
+        },
+        disabled: false
+    });
 
     const [toDos, setToDos] = useRecoilState(toDoState);
 
@@ -26,7 +39,7 @@ function App() {
             setToDos(oldToDos => 
                 [ ...oldToDos, { 
                     toDo: newToDo, 
-                    id: Date.now(), 
+                    id: Date.now(),
                     category: chosenCategory
                 } ]
             );
@@ -34,21 +47,9 @@ function App() {
         }
     };
 
-    const inputRef = useRef<HTMLInputElement>(null);
-
     const handleCategoryChange = function(e: React.FormEvent<HTMLSelectElement>) {
         const chosenCategory = e.currentTarget.value as EnumCategories;
         setChosenCategory(chosenCategory);
-
-        if(chosenCategory === EnumCategories.ALL) {
-            if(inputRef.current) {
-                inputRef.current.disabled = true;
-            };
-        } else {
-            if(inputRef.current) {
-                inputRef.current.disabled = false;
-            };
-        }
     };
 
     const filteredToDoList = useRecoilValue(todoSelector);
@@ -68,15 +69,9 @@ function App() {
                 <option value={EnumCategories.DONE}>DONE</option>
             </select>
             <form onSubmit={handleSubmit(onValid)}>
-                <input {...register('newToDo', {
-                    required: 'Write here!',
-                    minLength: {
-                        value: 3,
-                        message: 'Write down specific!'
-                    }
-                })} 
-                ref={inputRef}
+                <input {...toDoRegister} 
                 placeholder="Input your to-do here!"
+                disabled={ chosenCategory === EnumCategories.ALL }
                 />
                 <button type="submit">Add</button>
                 <p>{ errors?.newToDo?.message }</p>
