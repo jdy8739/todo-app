@@ -1,5 +1,4 @@
 import { atom, selector } from "recoil";
-import TodoElem from "./components/TodoElem";
 
 export enum EnumCategories {
     'TO_DO' = 'TO_DO',

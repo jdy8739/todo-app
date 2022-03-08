@@ -19,6 +19,7 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
                             categories.map(category => {
                                 return (
                                     <div key={category}>
+                                        <p>{category}</p>
                                         {
                                             toDos.filter(toDoElem => 
                                                 category === toDoElem.category).map(filteredToDoElem => {
