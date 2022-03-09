@@ -20,7 +20,7 @@ export const categoriesObj: ICategoriesObj = {
 
 const isSavedCategories = localStorage.getItem('categories');
 
-let savedCategories: ICategoriesObj = {};
+let savedCategories: ICategoriesObj | null = null;
 
 if(isSavedCategories !== null) {
     savedCategories = JSON.parse(isSavedCategories);
@@ -30,7 +30,7 @@ if(isSavedCategories !== null) {
 
 export const categoriesObjAtom = atom<ICategoriesObj>({
     key: 'categoriesObjAtom',
-    default: savedCategories === {} ? categoriesObj : savedCategories
+    default: !savedCategories ? categoriesObj : savedCategories
 });
 
 export interface IToDos {
