@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
-import { categoriesObjAtom, category, todoSelector, toDoStateAtom } from "./atoms";
+import { categoriesObjAtom, category, IToDos, todoSelector, toDoStateAtom } from "./atoms";
 import CategoryCreator from "./components/CategoryCreator";
 import Header from "./components/Header";
 import TodoList from "./components/TodoList";
@@ -45,15 +45,30 @@ function App() {
                 { shouldFocus: true }
             );
         } else {
-            setToDos(oldToDos => 
-                [ ...oldToDos, { 
-                    toDo: newToDo, 
-                    id: Date.now(),
-                    category: chosenCategory
-                } ]
-            );
+            const newToDoObj = {
+                toDo: newToDo, 
+                id: Date.now(),
+                category: chosenCategory
+            };
+            setToDos(oldToDos => [ ...oldToDos, newToDoObj ]);
             setValue('newToDo', '');
-        }
+
+            saveNewToDoObjInLocalStorage(newToDoObj);
+        };
+    };
+
+    const saveNewToDoObjInLocalStorage = function(newToDoObj: IToDos) {
+        const isSavedToDos = localStorage.getItem('toDos');
+
+        let savedToDos: IToDos[] = [];
+
+        if(isSavedToDos !== null) {
+            savedToDos = JSON.parse(isSavedToDos);
+        } else {
+            savedToDos = [];
+        };
+        savedToDos.push(newToDoObj);
+        localStorage.setItem('toDos', JSON.stringify(savedToDos));
     };
 
     const handleCategoryChange = function(e: React.FormEvent<HTMLSelectElement>) {

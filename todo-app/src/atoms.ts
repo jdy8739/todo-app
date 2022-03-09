@@ -18,9 +18,19 @@ export const categoriesObj: ICategoriesObj = {
     'ALL': 'ALL'
 };
 
+const isSavedCategories = localStorage.getItem('categories');
+
+let savedCategories: ICategoriesObj = {};
+
+if(isSavedCategories !== null) {
+    savedCategories = JSON.parse(isSavedCategories);
+} else {
+    localStorage.setItem('categories', JSON.stringify(categoriesObj));
+};
+
 export const categoriesObjAtom = atom<ICategoriesObj>({
     key: 'categoriesObjAtom',
-    default: categoriesObj
+    default: savedCategories === {} ? categoriesObj : savedCategories
 });
 
 export interface IToDos {
@@ -29,14 +39,24 @@ export interface IToDos {
     category: string
 };
 
+const isSavedToDos = localStorage.getItem('toDos');
+
+let savedToDos;
+
+if(isSavedToDos !== null) {
+    savedToDos = JSON.parse(isSavedToDos);
+} else {
+    savedToDos = [];
+};
+
 export const toDoStateAtom = atom<IToDos[]>({
     key: 'todo',
-    default: []
+    default: savedToDos
 });
 
 export const category = atom<string>({
     key: 'category',
-    default: categoriesObj.TO_DO
+    default: categoriesObj.ALL
 });
 
 export const todoSelector = selector({

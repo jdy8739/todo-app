@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRecoilState } from "recoil";
-import { categoriesObjAtom } from "../atoms";
+import { categoriesObjAtom, ICategoriesObj } from "../atoms";
 
 
 function CategoryCreator() {
@@ -18,9 +18,19 @@ function CategoryCreator() {
         }
 
         setCategoriesObj(oldCategoriesObj => {
+            addToDoCategoryInLocalStorage(newCategoryName);
             return { ...oldCategoriesObj, [newCategoryName]: newCategoryName };
         });
         setNewCategoryName('');
+    };
+
+    const addToDoCategoryInLocalStorage = (categoryName: string) => {
+        const isSavedCategories = localStorage.getItem('categories');
+        if(isSavedCategories !== null) {
+            const savedCategories: ICategoriesObj = JSON.parse(isSavedCategories);
+            savedCategories[categoryName] = categoryName;
+            localStorage.setItem('categories', JSON.stringify(savedCategories));
+        };
     };
 
     const handleOnChange = function(e: React.FormEvent<HTMLInputElement>) {

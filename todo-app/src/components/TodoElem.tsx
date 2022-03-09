@@ -38,11 +38,24 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
                 category: newCategory
             };
 
+            updateToDoObjInLocalStorage(targetIndex, newCategory);
+
             return updatedToDoList;
         });
     };
 
+    const updateToDoObjInLocalStorage = (targetIndex: number, newCategory: string) => {
+        const isSavedToDos = localStorage.getItem('toDos');
+        if(isSavedToDos !== null) {
+            const savedToDos: IToDos[] = JSON.parse(isSavedToDos);
+            savedToDos.splice(targetIndex, 1, 
+                { ...savedToDos[targetIndex], category: newCategory });
+            localStorage.setItem('toDos', JSON.stringify(savedToDos));
+        }
+    };
+
     const deleteToDoElem = function() {
+
         setToDoList(oldToDoList => {
 
             const updatedToDoList = [...oldToDoList];
@@ -51,8 +64,19 @@ function TodoElem({ toDoElem }: { toDoElem: IToDos }) {
 
             updatedToDoList.splice(targetIndex, 1);
 
+            deleteToDoObjInLocalStorage(targetIndex);
+
             return updatedToDoList;
         });
+    };
+
+    const deleteToDoObjInLocalStorage = (targetIndex: number) => {
+        const isSavedToDos = localStorage.getItem('toDos');
+        if(isSavedToDos !== null) {
+            const savedToDos: IToDos[] = JSON.parse(isSavedToDos);
+            savedToDos.splice(targetIndex, 1);
+            localStorage.setItem('toDos', JSON.stringify(savedToDos));
+        }
     };
 
     const categoriesObj = useRecoilValue(categoriesObjAtom);

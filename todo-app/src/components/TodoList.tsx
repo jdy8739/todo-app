@@ -57,6 +57,9 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
 
         setToDoState(oldToDoState => {
             const updatedToDoState = [...oldToDoState];
+
+            deleteToDoObjInLocalStorageByCategory(chosenCategoryName)
+
             return deleteToDoListMatchesCategory(updatedToDoState, chosenCategoryName);;
         });
 
@@ -68,18 +71,41 @@ function TodoList({ toDos }: { toDos: IToDos[] }) {
         setChosenCategory('ALL');
     };
 
+    const deleteToDoObjInLocalStorageByCategory = (category: string) => {
+        const isSavedToDos = localStorage.getItem('toDos');
+        if(isSavedToDos !== null) {
+            const savedToDos: IToDos[] = JSON.parse(isSavedToDos);
+            
+            for(let i=savedToDos.length - 1; i>=0; i--) {
+                if(savedToDos[i].category === category) savedToDos.splice(i, 1);
+            };
+
+            localStorage.setItem('toDos', JSON.stringify(savedToDos));
+        };
+    };
+
     const deleteToDoListMatchesCategory = (updatedToDoState: IToDos[], chosenCategoryName: string) => {
         for(let i=updatedToDoState.length - 1; i>=0; i--) {
             if(updatedToDoState[i].category === chosenCategoryName) {
                 updatedToDoState.splice(i, 1);
-            }
-        }
+            };
+        };
         return updatedToDoState;
     };
 
-    const deleteToDoCategory = (updatedCategoriesObj: ICategoriesObj, chosenCategoryName: string) => {
-        delete updatedCategoriesObj[chosenCategoryName];
+    const deleteToDoCategory = (updatedCategoriesObj: ICategoriesObj, categoryName: string) => {
+        delete updatedCategoriesObj[categoryName];
+        deleteToDoCategoryInLocalStorage(categoryName);
         return updatedCategoriesObj;
+    };
+
+    const deleteToDoCategoryInLocalStorage = (categoryName: string) => {
+        const isSavedCategories = localStorage.getItem('categories');
+        if(isSavedCategories !== null) {
+            const savedCategories: ICategoriesObj = JSON.parse(isSavedCategories);
+            delete savedCategories[categoryName];
+            localStorage.setItem('categories', JSON.stringify(savedCategories));
+        };
     };
 
     const handleOnClickCategory = (changedCategory: string) => {
