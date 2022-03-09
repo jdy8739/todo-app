@@ -11,6 +11,12 @@ interface INewToDo {
     newToDo: string
 };
 
+const Container = styled.div`
+    max-width: 1800px;
+    min-width: 480px;
+    margin: auto;
+`;
+
 const ErrorMessageDiv = styled.div`
     width: 200px;
     height: 20px;
@@ -87,7 +93,7 @@ function App() {
     const categoriesObj = useRecoilValue(categoriesObjAtom);
 
     return (
-      <div className="App">
+      <Container>
             <Header />
             <form
             style={{ textAlign: 'center' }}
@@ -115,7 +121,7 @@ function App() {
             </form>
             <TodoList toDos={filteredToDoList}/>
             <CategoryCreator />
-      </div>
+      </Container>
     );
   }
   
